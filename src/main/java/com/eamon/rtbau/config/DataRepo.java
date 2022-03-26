@@ -1,4 +1,4 @@
-package com.eamon.rtbau.user;
+package com.eamon.rtbau.config;
 
 import lombok.extern.slf4j.Slf4j;
 

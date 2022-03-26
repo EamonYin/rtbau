@@ -1,6 +1,6 @@
 package com.eamon.rtbau.user.controller;
 
-import com.eamon.rtbau.user.DataRepo;
+import com.eamon.rtbau.config.DataRepo;
 import com.zjiecode.wxpusher.client.WxPusher;
 import com.zjiecode.wxpusher.client.bean.Message;
 import com.zjiecode.wxpusher.client.bean.callback.AppSubscribeBean;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,12 +31,22 @@ public class UserController {
     @Value("${appToken}")
     private String appToken;
 
+    /**
+     * wxpusher回调
+     * @param callBackReq
+     * @return
+     */
     @PostMapping("/callback")
     public String callback(@RequestBody BaseCallBackReq callBackReq) {
         log.info("收到wxpusher回调:{}", JSONObject.toJSONString(callBackReq));
         if (BaseCallBackReq.ACTION_APP_SUBSCRIBE.equalsIgnoreCase(callBackReq.getAction())) {
             AppSubscribeBean appSubscribeBean = JSONObject.parseObject(JSONObject.toJSONString(callBackReq.getData()), AppSubscribeBean.class);
             if (!StringUtils.isEmpty(appSubscribeBean.getExtra())) {
+
+                /**
+                 * 写业务
+                 */
+
                 DataRepo.put(appSubscribeBean.getExtra(), appSubscribeBean.getUid());
                 log.info("存储回调数据:{}", JSONObject.toJSONString(appSubscribeBean));
                 //扫码以后，发送一条消息给用户
