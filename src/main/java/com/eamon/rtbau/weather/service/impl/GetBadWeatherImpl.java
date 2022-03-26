@@ -19,6 +19,7 @@ import java.net.URLConnection;
 
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author:Eamon
@@ -32,17 +33,34 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
     private String GDKey;
 
     @Override
-    public String getBadWeatherCities() throws Exception {
-        //北京代码
-        String cityCode = "110000";
-        //模拟北京一个城市，调用一次。后期循环
-        parseWeather(cityCode);
+    public String getTomorrowIsBadWeather(String cityCode) throws Exception {
+
+        //获得指定城市天气
+        WeatherInfo weatherInfo = parseWeather(cityCode);
 
         /**
          * 查询明天有没有恶劣天气
+         * flag:
+         * false:没有恶劣天气
+         * true：有恶劣天气
          */
+        Boolean flag = false;
+        List<Weather> casts = weatherInfo.getCasts();
+        //转天的天气情况
+        Weather tomorrowWeather = casts.get(1);
+        System.out.println("明天的天气：" + tomorrowWeather);
+        Pattern pattern = Pattern.compile("(雨|雪)");
+        String dayweather = tomorrowWeather.getDayweather();
+        String nightweather = tomorrowWeather.getNightweather();
+        boolean dayIsBad = pattern.matcher(dayweather).find();
+        System.out.println("dayIsBad:"+dayIsBad);
+        boolean nightIsBad = pattern.matcher(nightweather).find();
+        System.out.println("nightIsBad:"+nightIsBad);
+        if(dayIsBad&&nightIsBad){
+            flag=true;
+        }
 
-        return null;
+        return flag.toString();
 
     }
 

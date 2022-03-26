@@ -18,7 +18,9 @@ public class WeatherController {
 
     @GetMapping("/get")
     public String loginAdminUser() throws Exception {
-        return getBadWeatherImpl.getBadWeatherCities();
+        //北京代码
+        String cityCode = "110000";
+        return getBadWeatherImpl.getTomorrowIsBadWeather(cityCode);
     }
 
 }

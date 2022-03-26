@@ -6,6 +6,11 @@ package com.eamon.rtbau.weather.service;
  * @version:1.0
  */
 public interface GetBadWeatherService {
-    //获得明天恶劣天气城市
-    String getBadWeatherCities() throws Exception;
+    /**
+     * 指定城市明天是否为恶劣天气
+     * @param cityCode 城市代码
+     * @return true:是恶劣天气；false:不是恶劣天气
+     * @throws Exception
+     */
+    String getTomorrowIsBadWeather(String cityCode) throws Exception;
 }
