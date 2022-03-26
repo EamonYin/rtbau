@@ -33,9 +33,21 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
 
     @Override
     public String getBadWeatherCities() throws Exception {
-
+        //北京代码
         String cityCode = "110000";
+        //模拟北京一个城市，调用一次。后期循环
+        parseWeather(cityCode);
 
+        /**
+         * 查询明天有没有恶劣天气
+         */
+
+        return null;
+
+    }
+
+    //解析高德天气json
+    private WeatherInfo parseWeather(String cityCode) throws Exception {
         //外接口路径
         String gdApi = "https://restapi.amap.com/v3/weather/weatherInfo?key=" + GDKey + "&city=" + cityCode + "&extensions=all";
         //链接URL
@@ -64,12 +76,7 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
         String res = JSON.parse(forecastsV2).toString();
         WeatherInfo weatherInfo = JSONObject.parseObject(res, WeatherInfo.class);
 
-        /**
-         * 查询明天有没有恶劣天气
-         */
-
-
-        return null;
-
+        return weatherInfo;
     }
+
 }
