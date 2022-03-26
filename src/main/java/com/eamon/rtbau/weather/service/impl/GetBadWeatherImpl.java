@@ -61,12 +61,8 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
         //删除开头结尾的[]
         String regex = "^\\[*|\\]*$";
         String forecastsV2 = forecasts.replaceAll(regex, "");
-        System.out.println("---" + forecastsV2);
-        String s = JSON.parse(forecastsV2).toString();
-        WeatherInfo weatherInfo1 = JSONObject.parseObject(s, WeatherInfo.class);
-        //获取对象中某个属性的值
-//        String val = obj.getString("city");
-//        System.out.println(val);
+        String res = JSON.parse(forecastsV2).toString();
+        WeatherInfo weatherInfo = JSONObject.parseObject(res, WeatherInfo.class);
 
         /**
          * 查询明天有没有恶劣天气
