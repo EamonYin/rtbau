@@ -49,14 +49,18 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
         //转天的天气情况
         Weather tomorrowWeather = casts.get(1);
         System.out.println("明天的天气：" + tomorrowWeather);
+        //雨雪匹配规则
         Pattern pattern = Pattern.compile("(雨|雪)");
         String dayweather = tomorrowWeather.getDayweather();
         String nightweather = tomorrowWeather.getNightweather();
+        //明天白天是否为雨雪天气
         boolean dayIsBad = pattern.matcher(dayweather).find();
         System.out.println("dayIsBad:"+dayIsBad);
+        //明天晚上是否为雨雪天气
         boolean nightIsBad = pattern.matcher(nightweather).find();
         System.out.println("nightIsBad:"+nightIsBad);
-        if(dayIsBad&&nightIsBad){
+        //全天含雨雪，则判断为明天有恶劣天气
+        if(dayIsBad||nightIsBad){
             flag=true;
         }
 
