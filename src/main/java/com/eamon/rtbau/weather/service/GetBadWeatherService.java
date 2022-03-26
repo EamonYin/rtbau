@@ -7,5 +7,5 @@ package com.eamon.rtbau.weather.service;
  */
 public interface GetBadWeatherService {
     //获得明天恶劣天气城市
-    String getBadWeatherCities();
+    String getBadWeatherCities() throws Exception;
 }
