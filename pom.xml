@@ -111,6 +111,15 @@
         </dependency>
 
 
+        <!--WxPusher SDK 微信推送-->
+        <dependency>
+            <groupId>com.zjiecode</groupId>
+            <artifactId>wxpusher-java-sdk</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+
+
+
 
     </dependencies>
 
