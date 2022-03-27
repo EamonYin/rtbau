@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-03-26
  */
 @RestController
-@RequestMapping("//rtbau-user")
+@RequestMapping("/rtbau-user")
 public class RtbauUserController {
 
 }
