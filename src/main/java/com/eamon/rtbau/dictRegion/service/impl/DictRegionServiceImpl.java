@@ -4,7 +4,11 @@ import com.eamon.rtbau.dictRegion.entity.pojo.DictRegion;
 import com.eamon.rtbau.dictRegion.mapper.DictRegionMapper;
 import com.eamon.rtbau.dictRegion.service.IDictRegionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.xml.ws.Action;
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DictRegionServiceImpl extends ServiceImpl<DictRegionMapper, DictRegion> implements IDictRegionService {
 
+    @Autowired
+    IDictRegionService iDictRegionService;
+
+    @Override
+    public List<DictRegion> getProvince() {
+        List<DictRegion> list = iDictRegionService.lambdaQuery().eq(DictRegion::getParentRegionCode, 0).list();
+        return list;
+    }
 }
