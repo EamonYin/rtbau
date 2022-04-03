@@ -78,4 +78,7 @@ public class UserController {
     public void getWxCallback(String str) {
         System.out.println(str);
     }
+
+
+
 }

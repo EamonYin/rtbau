@@ -2,6 +2,7 @@ package com.eamon.rtbau.rtbauUser.service;
 
 import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-03-26
  */
 public interface IRtbauUserService extends IService<RtbauUser> {
-
+    Boolean saveUserMsg(RtbauUser rtbauUser);
 }
