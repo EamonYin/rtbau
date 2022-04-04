@@ -1,9 +1,14 @@
 package com.eamon.rtbau.task;
 
+import com.eamon.rtbau.config.WxPushMessageUtil;
 import com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper;
 import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import com.eamon.rtbau.weather.service.GetBadWeatherService;
+import com.zjiecode.wxpusher.client.WxPusher;
+import com.zjiecode.wxpusher.client.bean.Message;
+import com.zjiecode.wxpusher.client.bean.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +31,11 @@ public class weatherTask {
     @Autowired
     GetBadWeatherService getBadWeatherService;
 
+    @Value("${appToken}")
+    private String appToken;
+
+    private String sign = "";
+
     @Async
     @Scheduled(cron = "0 0 21 * * ? ")
     public void reminderTask() throws Exception {
@@ -34,23 +44,33 @@ public class weatherTask {
         List<String> allRegionCode = rtbauUserMapper.getAllRegionCode();
 
         //初始化明天恶劣天气的地域编号list2
-        List<String> badWeather = new ArrayList<>();
+        List<String> badWeatherRegionCode = new ArrayList<>();
 
         //遍历list1获取明天恶劣天气的地域编号放到list2中
-        for ( String badCode: allRegionCode) {
+        for (String badCode : allRegionCode) {
             Boolean tomorrowIsBadWeather = getBadWeatherService.getTomorrowIsBadWeather(badCode);
-            if(tomorrowIsBadWeather){
-                badWeather.add(badCode);
+            if (tomorrowIsBadWeather) {
+                badWeatherRegionCode.add(badCode);
             }
         }
 
-        //初始化list3，存放用户uid
-        List<String> uids = new ArrayList<>();
+        //获取数据库中恶劣天气地域的所有用户uid
+        List<String> sendUids = rtbauUserMapper.getSendUids(badWeatherRegionCode);
 
-        //匹配数据库中list2地域的用户，将uid放入list3
+        //给list2中的用户发信息
+        for (String uid : sendUids) {
+            Result result = sendText(uid);
+            System.out.println("消息:" + result);
+        }
 
+    }
 
-        //给list3中的用户发信息
-
+    public Result sendText(String uid) {
+        Message message = new Message();
+        message.setContentType(Message.CONTENT_TYPE_TEXT);
+        message.setUid(uid);
+        message.setAppToken(appToken);
+        message.setContent("【记得带伞！！！】\n\n\n" + sign);
+        return WxPusher.send(message);
     }
 }
