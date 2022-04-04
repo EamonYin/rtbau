@@ -12,5 +12,5 @@ public interface GetBadWeatherService {
      * @return true:是恶劣天气；false:不是恶劣天气
      * @throws Exception
      */
-    String getTomorrowIsBadWeather(String cityCode) throws Exception;
+    Boolean getTomorrowIsBadWeather(String cityCode) throws Exception;
 }

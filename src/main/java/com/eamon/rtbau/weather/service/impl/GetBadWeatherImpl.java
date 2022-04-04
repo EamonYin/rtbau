@@ -33,7 +33,7 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
     private String GDKey;
 
     @Override
-    public String getTomorrowIsBadWeather(String cityCode) throws Exception {
+    public Boolean getTomorrowIsBadWeather(String cityCode) throws Exception {
 
         //获得指定城市天气
         WeatherInfo weatherInfo = parseWeather(cityCode);
@@ -64,7 +64,7 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
             flag=true;
         }
 
-        return flag.toString();
+        return flag;
 
     }
 

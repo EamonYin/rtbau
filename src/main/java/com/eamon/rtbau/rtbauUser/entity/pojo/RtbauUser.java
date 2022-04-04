@@ -1,12 +1,13 @@
 package com.eamon.rtbau.rtbauUser.entity.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -39,5 +40,16 @@ public class RtbauUser extends Model {
     @ApiModelProperty(value = "行政区划代码，对应WxPusher的adcode")
     private String regionCode;
 
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+
+    @TableLogic
+    @ApiModelProperty(value = "逻辑删除 0未删  1删")
+    private Integer isDeleted;
 
 }
