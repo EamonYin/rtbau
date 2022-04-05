@@ -7,6 +7,7 @@ import com.eamon.rtbau.weather.service.GetBadWeatherService;
 import com.zjiecode.wxpusher.client.WxPusher;
 import com.zjiecode.wxpusher.client.bean.Message;
 import com.zjiecode.wxpusher.client.bean.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ import java.util.List;
  */
 @EnableAsync
 @Component
+@Slf4j
 public class weatherTask {
 
     @Autowired
@@ -54,15 +57,20 @@ public class weatherTask {
             }
         }
 
-        //获取数据库中恶劣天气地域的所有用户uid
-        List<String> sendUids = rtbauUserMapper.getSendUids(badWeatherRegionCode);
+        //如果存在恶劣天气城市，执行下面的逻辑
+        if (badWeatherRegionCode.size() != 0) {
+            log.info("【*】运行时间：[" + new Date() + "] 存在恶劣天气城市，执行发送消息逻辑");
+            //获取数据库中恶劣天气地域的所有用户uid
+            List<String> sendUids = rtbauUserMapper.getSendUids(badWeatherRegionCode);
 
-        //给list2中的用户发信息
-        for (String uid : sendUids) {
-            Result result = sendText(uid);
-            System.out.println("消息:" + result);
+            //给list2中的用户发信息
+            for (String uid : sendUids) {
+                Result result = sendText(uid);
+                System.out.println("消息:" + result);
+            }
+        } else {
+            log.info("运行时间：[" + new Date() + "] 不存在恶劣天气城市");
         }
-
     }
 
     public Result sendText(String uid) {
