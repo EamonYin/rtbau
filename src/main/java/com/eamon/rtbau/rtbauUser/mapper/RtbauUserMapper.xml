@@ -10,7 +10,7 @@
 
     <select id="getSendUids" resultType="java.lang.String">
         SELECT uid FROM `rtbau_user` where region_code in
-        <foreach collection="regionCodes" item="uid" index="code" open="(" close=")" separator=",">
+        <foreach collection="regionCodes" item="code" index="index" open="(" close=")" separator=",">
         #{code}
         </foreach>
     </select>

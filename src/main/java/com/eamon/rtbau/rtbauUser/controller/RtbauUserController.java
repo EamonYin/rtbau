@@ -38,7 +38,7 @@ public class RtbauUserController {
 
     @GetMapping("/getSendUids")
     public List<String> getSendUids() {
-        ArrayList<String> strings = new ArrayList<>();
+        List<String> strings = new ArrayList<>();
         strings.add("120000");
         strings.add("130000");
         return rtbauUserMapper.getSendUids(strings);

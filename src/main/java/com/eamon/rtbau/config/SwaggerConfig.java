@@ -59,7 +59,7 @@ public class SwaggerConfig {
                 .title("使用Swagger2 构建RESTful APIS - Test") //接口管理文档首页显示
                 .description("Test - Swagger使用接口演示 Header 携带语言ZH 或者EN")//API的描述
                 .termsOfServiceUrl("localhost:8090/practice-user/")//网站url等
-                .version("1.0")
+                .version("application-dev.yml.0")
                 .build();
     }
     //全站统一参数配置，一般是token。
