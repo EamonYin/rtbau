@@ -8,6 +8,7 @@ import com.eamon.rtbau.weather.service.GetBadWeatherService;
 //import net.sf.json.JSON;
 //import net.sf.json.JSONObject;
 //import net.sf.json.JSONObject;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
  * @version:1.0
  */
 @Service
+@Log4j2
 public class GetBadWeatherImpl implements GetBadWeatherService {
 
     @Value("${GDKey}")
@@ -48,17 +50,17 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
         List<Weather> casts = weatherInfo.getCasts();
         //转天的天气情况
         Weather tomorrowWeather = casts.get(1);
-        System.out.println("明天的天气：" + tomorrowWeather);
+        log.info("明天的天气:{}", JSON.toJSON(tomorrowWeather));
         //雨雪匹配规则
         Pattern pattern = Pattern.compile("(雨|雪)");
         String dayweather = tomorrowWeather.getDayweather();
         String nightweather = tomorrowWeather.getNightweather();
         //明天白天是否为雨雪天气
         boolean dayIsBad = pattern.matcher(dayweather).find();
-        System.out.println("dayIsBad:"+dayIsBad);
+        log.info("dayIsBad:{}",dayIsBad);
         //明天晚上是否为雨雪天气
         boolean nightIsBad = pattern.matcher(nightweather).find();
-        System.out.println("nightIsBad:"+nightIsBad);
+        log.info("nightIsBad:{}",nightIsBad);
         //全天含雨雪，则判断为明天有恶劣天气
         if(dayIsBad||nightIsBad){
             flag=true;
