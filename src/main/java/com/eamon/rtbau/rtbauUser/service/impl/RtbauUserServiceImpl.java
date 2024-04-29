@@ -56,12 +56,22 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
             if (strIp == "") {
                 IpAdrressUtil ipAdrressUtil = new IpAdrressUtil();
                 strIp = ipAdrressUtil.getIpAdrress(request);
+                log.info("请求ip:{}",strIp);
             }
             HttpUtil httpUtil = new HttpUtil();
             String html = httpUtil.get("https://whois.pconline.com.cn/ipJson.jsp?ip=" + strIp + "&json=true", "", "", new HashMap<>());
             IPLocation ipLocation = JSONObject.parseObject(html, IPLocation.class);
             if (!Objects.isNull(ipLocation.getErr())) {
-                return ipLocation.getRegionCode();
+                // 有可能获取不到所在区，依次取上一级code
+                if(!Objects.equals(ipLocation.getRegionCode(),"0")){
+                    return ipLocation.getRegionCode();
+                }
+                if(!Objects.equals(ipLocation.getCityCode(),"0")){
+                    return ipLocation.getCityCode();
+                }
+                if(!Objects.equals(ipLocation.getProCode(),"0")){
+                    return ipLocation.getProCode();
+                }
             }
         } catch (Exception ex) {
             log.error("获取位置信息错误：{}", ex.getMessage());
