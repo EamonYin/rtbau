@@ -65,9 +65,7 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
         if(dayIsBad||nightIsBad){
             flag=true;
         }
-
         return flag;
-
     }
 
     //解析高德天气json

@@ -4,6 +4,8 @@ import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  服务类
@@ -14,4 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 public interface IRtbauUserService extends IService<RtbauUser> {
     Boolean saveUserMsg(RtbauUser rtbauUser);
+
+    String getIPLocation(String strIp, HttpServletRequest request);
 }

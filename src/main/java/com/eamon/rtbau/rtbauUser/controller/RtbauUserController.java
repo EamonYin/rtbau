@@ -7,6 +7,7 @@ import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +43,11 @@ public class RtbauUserController {
         strings.add("120000");
         strings.add("130000");
         return rtbauUserMapper.getSendUids(strings);
+    }
+
+    // 获取用户ip所在地code
+    @GetMapping("/getIPLocation")
+    public String getIPLocation(HttpServletRequest request){
+        return iRtbauUserService.getIPLocation("",request);
     }
 }

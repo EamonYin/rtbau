@@ -191,6 +191,27 @@
             <scope>test</scope>
         </dependency>
 
+        <!--  微信公众号推送  -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+        <!-- 获取ip所在地 -->
+        <dependency>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+
+        <!-- http请求工具 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
