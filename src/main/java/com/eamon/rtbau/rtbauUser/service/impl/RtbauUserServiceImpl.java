@@ -6,7 +6,9 @@ import com.eamon.rtbau.config.CopyUtil;
 import com.eamon.rtbau.config.HttpUtil;
 import com.eamon.rtbau.config.IpAdrressUtil;
 import com.eamon.rtbau.rtbauUser.entity.pojo.IPLocation;
+import com.eamon.rtbau.rtbauUser.entity.pojo.PushMsg;
 import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
+import com.eamon.rtbau.rtbauUser.entity.pojo.UserQR;
 import com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper;
 import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,8 +18,7 @@ import org.springframework.stereotype.Service;
 import com.eamon.rtbau.config.CopyUtil.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <p>
@@ -86,6 +87,33 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getUserQR() {
+        HttpUtil httpUtil = new HttpUtil();
+        Map<String, Object> param = new HashMap<>();
+        param.put("appToken","AT_fJJCxoV3Qjzl4oVleQ8goJAAvzGiEVFe");
+        param.put("extra",1);
+        param.put("validTime",1800);
+        String params = JSONObject.toJSONString(param);
+        String qr = httpUtil.jsonPostV2("https://wxpusher.zjiecode.com/api/fun/create/qrcode", "", "", params);
+        UserQR userQR = JSONObject.parseObject(qr, UserQR.class);
+        return userQR.getData().getUrl();
+    }
+
+    @Override
+    public String pushMsg(PushMsg pushMsg) {
+        HttpUtil httpUtil = new HttpUtil();
+        Map<String, Object> param = new HashMap<>();
+        param.put("appToken","AT_fJJCxoV3Qjzl4oVleQ8goJAAvzGiEVFe");
+        param.put("content","<h1>H1标题</h1><br/><p style=\\\"color:red;\\\">欢迎来到EamonPlanet！</p>");
+        param.put("contentType",2);
+        param.put("summary",pushMsg.getUids().toString());
+        param.put("uids",pushMsg.getUids());
+        String params = JSONObject.toJSONString(param);
+        String qr = httpUtil.jsonPostV2("https://wxpusher.zjiecode.com/api/send/message", "", "", params);
+        return null;
     }
 
 }

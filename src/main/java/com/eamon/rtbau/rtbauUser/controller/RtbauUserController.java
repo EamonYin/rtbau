@@ -1,9 +1,13 @@
 package com.eamon.rtbau.rtbauUser.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.eamon.rtbau.rtbauUser.entity.pojo.PushMsg;
+import com.eamon.rtbau.rtbauUser.entity.pojo.QRCallBack;
 import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
 import com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper;
 import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rtbau-user")
+@Log4j2
 public class RtbauUserController {
 
     @Autowired
@@ -47,13 +52,29 @@ public class RtbauUserController {
 
     // 获取用户ip所在地code
     @GetMapping("/getIPLocation")
-    public String getIPLocation(HttpServletRequest request){
-        return iRtbauUserService.getIPLocation("",request);
+    public String getIPLocation(HttpServletRequest request) {
+        return iRtbauUserService.getIPLocation("", request);
     }
 
     // 获取用户是否存在
     @PostMapping("/userIsExist")
-    public Boolean userIsExist(@RequestBody RtbauUser rtbauUser){
+    public Boolean userIsExist(@RequestBody RtbauUser rtbauUser) {
         return iRtbauUserService.userIsExist(rtbauUser);
+    }
+
+    @GetMapping("/getUserQR")
+    public String getUserQR() {
+        return iRtbauUserService.getUserQR();
+    }
+
+    @PostMapping("/userQRCallBack")
+    public String userQRCallBack(@RequestBody QRCallBack qrCallBack){
+        log.info("wxPusher回调信息：{}",JSONObject.toJSONString(qrCallBack));
+        PushMsg pushMsg = new PushMsg();
+        List<String> uids = new ArrayList<>();
+        uids.add(qrCallBack.getData().getUid());
+        pushMsg.setUids(uids);
+        iRtbauUserService.pushMsg(pushMsg);
+        return "";
     }
 }

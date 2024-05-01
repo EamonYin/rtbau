@@ -1,5 +1,6 @@
 package com.eamon.rtbau.rtbauUser.service;
 
+import com.eamon.rtbau.rtbauUser.entity.pojo.PushMsg;
 import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,4 +21,8 @@ public interface IRtbauUserService extends IService<RtbauUser> {
     String getIPLocation(String strIp, HttpServletRequest request);
 
     Boolean userIsExist(RtbauUser rtbauUser);
+
+    String getUserQR();
+
+    String pushMsg(PushMsg pushMsg);
 }
