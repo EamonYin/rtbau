@@ -79,4 +79,13 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         return "";
     }
 
+    @Override
+    public Boolean userIsExist(RtbauUser rtbauUser) {
+        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, rtbauUser.getUid()).last("limit 0,1").one();
+        if (user != null && user.getUid() != null) {
+            return true;
+        }
+        return false;
+    }
+
 }

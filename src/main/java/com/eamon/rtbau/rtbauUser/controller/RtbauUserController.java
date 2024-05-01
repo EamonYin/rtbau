@@ -50,4 +50,10 @@ public class RtbauUserController {
     public String getIPLocation(HttpServletRequest request){
         return iRtbauUserService.getIPLocation("",request);
     }
+
+    // 获取用户是否存在
+    @PostMapping("/userIsExist")
+    public Boolean userIsExist(@RequestBody RtbauUser rtbauUser){
+        return iRtbauUserService.userIsExist(rtbauUser);
+    }
 }

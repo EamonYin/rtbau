@@ -18,4 +18,6 @@ public interface IRtbauUserService extends IService<RtbauUser> {
     Boolean saveUserMsg(RtbauUser rtbauUser);
 
     String getIPLocation(String strIp, HttpServletRequest request);
+
+    Boolean userIsExist(RtbauUser rtbauUser);
 }
