@@ -52,4 +52,7 @@ public class RtbauUser extends Model {
     @ApiModelProperty(value = "逻辑删除 0未删  1删")
     private Integer isDeleted;
 
+    @ApiModelProperty(value = "最近一次使用的qr")
+    private String lastQrcode;
+
 }

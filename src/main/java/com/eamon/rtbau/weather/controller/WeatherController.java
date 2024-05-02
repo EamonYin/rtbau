@@ -1,5 +1,6 @@
 package com.eamon.rtbau.weather.controller;
 
+import com.eamon.rtbau.rtbauUser.entity.pojo.IPLocationOutput;
 import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import com.eamon.rtbau.weather.service.impl.GetBadWeatherImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,12 @@ public class WeatherController {
     @GetMapping("/get")
     public Boolean loginAdminUser(HttpServletRequest request) throws Exception {
         String cityCode = "";
-        String ipLocation = iRtbauUserService.getIPLocation("", request);
-        if (Objects.equals(ipLocation, "999999") || Objects.equals(ipLocation, "0") || Objects.isNull(ipLocation)) {
+        IPLocationOutput ipLocation = iRtbauUserService.getIPLocation("", request);
+        if (Objects.equals(ipLocation.getLocationCode(), "999999") || Objects.equals(ipLocation.getLocationCode(), "0") || Objects.isNull(ipLocation)) {
             //北京代码
             cityCode = "450900";
         }
-        cityCode = ipLocation;
+        cityCode = ipLocation.getLocationCode();
         return getBadWeatherImpl.getTomorrowIsBadWeather(cityCode);
     }
 

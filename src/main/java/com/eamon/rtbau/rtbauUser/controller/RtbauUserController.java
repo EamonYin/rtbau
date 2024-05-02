@@ -2,9 +2,7 @@ package com.eamon.rtbau.rtbauUser.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.eamon.rtbau.rtbauUser.entity.pojo.PushMsg;
-import com.eamon.rtbau.rtbauUser.entity.pojo.QRCallBack;
-import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
+import com.eamon.rtbau.rtbauUser.entity.pojo.*;
 import com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper;
 import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public class RtbauUserController {
 
     // 获取用户ip所在地code
     @GetMapping("/getIPLocation")
-    public String getIPLocation(HttpServletRequest request) {
+    public IPLocationOutput getIPLocation(HttpServletRequest request) {
         return iRtbauUserService.getIPLocation("", request);
     }
 
@@ -62,19 +61,28 @@ public class RtbauUserController {
         return iRtbauUserService.userIsExist(rtbauUser);
     }
 
-    @GetMapping("/getUserQR")
-    public String getUserQR() {
-        return iRtbauUserService.getUserQR();
+    @PostMapping("/getUserQR")
+    public GetUserQROutput getUserQR(@RequestBody GetUserQRInput input) {
+        log.info("getUserQR请求:{}",JSONObject.toJSONString(input));
+        return iRtbauUserService.getUserQR(input);
     }
 
     @PostMapping("/userQRCallBack")
-    public String userQRCallBack(@RequestBody QRCallBack qrCallBack){
-        log.info("wxPusher回调信息：{}",JSONObject.toJSONString(qrCallBack));
+    public String userQRCallBack(@RequestBody QRCallBack qrCallBack) {
+        log.info("wxPusher回调信息：{}", JSONObject.toJSONString(qrCallBack));
         PushMsg pushMsg = new PushMsg();
         List<String> uids = new ArrayList<>();
         uids.add(qrCallBack.getData().getUid());
         pushMsg.setUids(uids);
         iRtbauUserService.pushMsg(pushMsg);
+        // 保存或更新用户数据
+        RtbauUser rtbauUser = new RtbauUser();
+        rtbauUser.setUid(qrCallBack.getData().getUid());
+        rtbauUser.setRegionCode(qrCallBack.getData().getExtra());
+        rtbauUser.setCreateTime(new Date());
+        rtbauUser.setUpdateTime(new Date());
+        rtbauUser.setIsDeleted(0);
+        iRtbauUserService.saveUserMsg(rtbauUser);
         return "";
     }
 }
