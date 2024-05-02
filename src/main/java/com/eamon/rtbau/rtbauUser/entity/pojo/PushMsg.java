@@ -45,4 +45,6 @@ public class PushMsg {
      * verifyPayType
      */
     private Integer verifyPayType;
+
+    public String extra;
 }

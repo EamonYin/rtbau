@@ -74,6 +74,7 @@ public class RtbauUserController {
         List<String> uids = new ArrayList<>();
         uids.add(qrCallBack.getData().getUid());
         pushMsg.setUids(uids);
+        pushMsg.setExtra(qrCallBack.getData().getExtra());
         iRtbauUserService.pushMsg(pushMsg);
         // 保存或更新用户数据
         RtbauUser rtbauUser = new RtbauUser();

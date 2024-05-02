@@ -6,4 +6,5 @@ import lombok.Data;
 @Data
 public class GetUserQRInput {
     public String cityCode;
+    public String cityName;
 }

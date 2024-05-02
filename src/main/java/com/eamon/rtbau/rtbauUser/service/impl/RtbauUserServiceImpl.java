@@ -10,6 +10,7 @@ import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +104,7 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         HttpUtil httpUtil = new HttpUtil();
         Map<String, Object> param = new HashMap<>();
         param.put("appToken","AT_fJJCxoV3Qjzl4oVleQ8goJAAvzGiEVFe");
-        param.put("extra",JSONObject.toJSONString(input.getCityCode()));
+        param.put("extra",JSONObject.toJSONString(input));
         param.put("validTime",1800);
         String params = JSONObject.toJSONString(param);
         String qr = httpUtil.jsonPostV2("https://wxpusher.zjiecode.com/api/fun/create/qrcode", "", "", params);
@@ -117,16 +118,20 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
 
     @Override
     public String pushMsg(PushMsg pushMsg) {
+        GetUserQRInput getUserQRInput = JSONObject.parseObject(pushMsg.getExtra(), GetUserQRInput.class);
+        String uid = pushMsg.getUids().get(0);
+        System.out.println(uid);
+        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, uid).last("limit 0,1").one();
         HttpUtil httpUtil = new HttpUtil();
         Map<String, Object> param = new HashMap<>();
         param.put("appToken","AT_fJJCxoV3Qjzl4oVleQ8goJAAvzGiEVFe");
-        param.put("content","<h1>H1标题</h1><br/><p style=\\\"color:red;\\\">欢迎来到EamonPlanet！</p>");
+        param.put("content","<h1>欢迎来到EamonPlanet！</h1><br/><p style=\"color:red;\">"+uid+"在"+getUserQRInput.getCityName()+"于"+user.getCreateTime()+"登录"+"</p>");
         param.put("contentType",2);
-        param.put("summary",pushMsg.getUids().toString());
+        param.put("summary",uid+"在"+getUserQRInput.getCityName()+"登录");
         param.put("uids",pushMsg.getUids());
+        param.put("url","http://hello.xiaoming100.club");
         String params = JSONObject.toJSONString(param);
         String qr = httpUtil.jsonPostV2("https://wxpusher.zjiecode.com/api/send/message", "", "", params);
         return null;
     }
-
 }
