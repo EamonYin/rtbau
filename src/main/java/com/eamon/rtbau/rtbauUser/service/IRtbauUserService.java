@@ -4,10 +4,11 @@ import com.eamon.rtbau.rtbauUser.entity.pojo.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author EamonYin
@@ -23,4 +24,5 @@ public interface IRtbauUserService extends IService<RtbauUser> {
     GetUserQROutput getUserQR(GetUserQRInput input);
 
     String pushMsg(PushMsg pushMsg);
+
 }

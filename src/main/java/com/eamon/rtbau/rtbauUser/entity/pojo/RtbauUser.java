@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author EamonYin
@@ -19,7 +19,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="RtbauUser对象", description="")
+@ApiModel(value = "RtbauUser对象", description = "")
 public class RtbauUser extends Model {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +39,9 @@ public class RtbauUser extends Model {
 
     @ApiModelProperty(value = "行政区划代码，对应WxPusher的adcode")
     private String regionCode;
+
+    @ApiModelProperty(value = "行政区划名称，对应WxPusher的adcode")
+    private String regionName;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)

@@ -2,6 +2,12 @@ package com.eamon.rtbau.weather.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.eamon.rtbau.rtbauUser.entity.pojo.RtbauUser;
+import com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper;
+import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
 import com.eamon.rtbau.weather.entity.Weather;
 import com.eamon.rtbau.weather.entity.WeatherInfo;
 import com.eamon.rtbau.weather.service.GetBadWeatherService;
@@ -34,6 +40,7 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
     @Value("${GDKey}")
     private String GDKey;
 
+
     @Override
     public Boolean getTomorrowIsBadWeather(String cityCode) throws Exception {
 
@@ -57,13 +64,13 @@ public class GetBadWeatherImpl implements GetBadWeatherService {
         String nightweather = tomorrowWeather.getNightweather();
         //明天白天是否为雨雪天气
         boolean dayIsBad = pattern.matcher(dayweather).find();
-        log.info("dayIsBad:{}",dayIsBad);
+        log.info("dayIsBad:{}", dayIsBad);
         //明天晚上是否为雨雪天气
         boolean nightIsBad = pattern.matcher(nightweather).find();
-        log.info("nightIsBad:{}",nightIsBad);
+        log.info("nightIsBad:{}", nightIsBad);
         //全天含雨雪，则判断为明天有恶劣天气
-        if(dayIsBad||nightIsBad){
-            flag=true;
+        if (dayIsBad || nightIsBad) {
+            flag = true;
         }
         return flag;
     }

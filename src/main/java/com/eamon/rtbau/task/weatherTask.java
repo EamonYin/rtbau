@@ -41,6 +41,7 @@ public class weatherTask {
 
     @Async
     @Scheduled(cron = "0 0 21 * * ? ")
+//    @Scheduled(cron = "0 0/2 * * * ? ") //测试每隔两分钟运行一次
     public void reminderTask() throws Exception {
 
         //获取数据库中所有用户涉及的地域编list1
@@ -62,7 +63,6 @@ public class weatherTask {
             log.info("【*】运行时间：[" + new Date() + "] 存在恶劣天气城市，执行发送消息逻辑");
             //获取数据库中恶劣天气地域的所有用户uid
             List<String> sendUids = rtbauUserMapper.getSendUids(badWeatherRegionCode);
-
             //给list2中的用户发信息
             for (String uid : sendUids) {
                 Result result = sendText(uid);

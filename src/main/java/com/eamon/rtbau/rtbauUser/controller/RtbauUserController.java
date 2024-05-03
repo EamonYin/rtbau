@@ -63,7 +63,7 @@ public class RtbauUserController {
 
     @PostMapping("/getUserQR")
     public GetUserQROutput getUserQR(@RequestBody GetUserQRInput input) {
-        log.info("getUserQR请求:{}",JSONObject.toJSONString(input));
+        log.info("getUserQR请求:{}", JSONObject.toJSONString(input));
         return iRtbauUserService.getUserQR(input);
     }
 
@@ -77,9 +77,10 @@ public class RtbauUserController {
         pushMsg.setExtra(qrCallBack.getData().getExtra());
         iRtbauUserService.pushMsg(pushMsg);
         // 保存或更新用户数据
+        GetUserQRInput getUserQRInput = JSONObject.parseObject(qrCallBack.getData().getExtra(), GetUserQRInput.class);
         RtbauUser rtbauUser = new RtbauUser();
         rtbauUser.setUid(qrCallBack.getData().getUid());
-        rtbauUser.setRegionCode(qrCallBack.getData().getExtra());
+        rtbauUser.setRegionCode(getUserQRInput.getCityCode());
         rtbauUser.setCreateTime(new Date());
         rtbauUser.setUpdateTime(new Date());
         rtbauUser.setIsDeleted(0);

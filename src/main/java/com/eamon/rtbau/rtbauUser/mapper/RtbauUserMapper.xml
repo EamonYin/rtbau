@@ -3,15 +3,13 @@
 <mapper namespace="com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper">
 
     <select id="getAllRegionCode" resultType="java.lang.String">
-        SELECT region_code
-        FROM `rtbau_user`
-        GROUP BY region_code
+        select distinct(region_code) from rtbau_user where is_deleted=0
     </select>
 
     <select id="getSendUids" resultType="java.lang.String">
         SELECT uid FROM `rtbau_user` where region_code in
         <foreach collection="regionCodes" item="code" index="index" open="(" close=")" separator=",">
-        #{code}
+            #{code}
         </foreach>
     </select>
 
