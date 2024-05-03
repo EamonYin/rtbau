@@ -99,7 +99,8 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
 
     @Override
     public Boolean userIsExist(RtbauUser rtbauUser) {
-        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, rtbauUser.getUid()).last("limit 0,1").one();
+        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, rtbauUser.getUid()).eq(RtbauUser::getIsDeleted,0).last("limit 0,1").one();
+        log.info("userIsExist:{}",JSONObject.toJSONString(user));
         if (user != null && user.getUid() != null) {
             return true;
         }
@@ -121,6 +122,7 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
             output.setQrCode(userQR.getData().getCode());
             output.setQrUrl(userQR.getData().getUrl());
         }
+        log.info("getUserQR输出:{}",JSONObject.toJSONString(output));
         return output;
     }
 
@@ -147,7 +149,7 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         message.setAppToken(appToken);
         message.setSummary(uid + "在" + getUserQRInput.getCityName() + "登录");
         message.setContent("<h1>欢迎来到EamonPlanet！</h1><br/><p style=\"color:red;\">" + uid + "在" + getUserQRInput.getCityName() + "于" + user.getCreateTime() + "登录" + "</p>");
-        message.setUrl("http://hello.xiaoming100.club");
+        message.setUrl("http://hello.xiaoming100.club/#/guide?uid="+uid);
         WxPusher.send(message);
         return null;
     }

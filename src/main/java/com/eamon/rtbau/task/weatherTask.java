@@ -79,6 +79,7 @@ public class weatherTask {
         message.setUid(uid);
         message.setAppToken(appToken);
         message.setContent("【记得带伞！！！】\n\n\n" + sign);
+        message.setUrl("http://hello.xiaoming100.club/#/guide?uid="+uid);
         return WxPusher.send(message);
     }
 }
