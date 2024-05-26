@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -142,13 +143,20 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
 //        param.put("url","http://hello.xiaoming100.club");
 //        String params = JSONObject.toJSONString(param);
 //        String qr = httpUtil.jsonPostV2("https://wxpusher.zjiecode.com/api/send/message", "", "", params);
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH时mm分ss秒");
         Message message = new Message();
         message.setContentType(Message.CONTENT_TYPE_HTML);
         message.setUid(uid);
         message.setAppToken(appToken);
-        message.setSummary(uid + "在" + getUserQRInput.getCityName() + "登录");
-        message.setContent("<h1>欢迎来到EamonPlanet！</h1><br/><p style=\"color:red;\">" + uid + "在" + getUserQRInput.getCityName() + "于" + user.getCreateTime() + "登录" + "</p>");
+        message.setSummary("EamonPlanet注册成功,点击卡片查看");
+        message.setContent("<h1>\uD83C\uDF89恭喜您注册EamonPlanet成功\uD83C\uDF89</h1>\n" +
+                "<br/>\n" +
+                "<h4>如果未来某一天存在雨雪天气，EamonPlanet会在这里推送微信消息提醒您带伞的～</h4>\n" +
+                "<br/>\n" +
+                "<p style=\"color:red;\">" + uid + "在" + getUserQRInput.getCityName() + "于" + sdf.format(user.getCreateTime()) + " 登录 </p>\n" +
+                "<br/>\n" +
+                "<span>您可以通过上方的「链接：点击查看」</span><br/>\n" +
+                "<button onclick=\"location.href='http://hello.xiaoming100.club#/guide?uid="+uid+"'\">点击查看详情</button>");
         message.setUrl("http://hello.xiaoming100.club/#/guide?uid="+uid);
         WxPusher.send(message);
         return null;

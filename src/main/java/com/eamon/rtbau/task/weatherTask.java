@@ -78,6 +78,7 @@ public class weatherTask {
         message.setContentType(Message.CONTENT_TYPE_TEXT);
         message.setUid(uid);
         message.setAppToken(appToken);
+        message.setSummary("Eamon提醒明天记得带伞！");
         message.setContent("【记得带伞！！！】\n\n\n" + sign);
         message.setUrl("http://hello.xiaoming100.club/#/guide?uid="+uid);
         return WxPusher.send(message);
