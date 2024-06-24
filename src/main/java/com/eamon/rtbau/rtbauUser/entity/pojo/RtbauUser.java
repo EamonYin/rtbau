@@ -58,4 +58,7 @@ public class RtbauUser extends Model {
     @ApiModelProperty(value = "最近一次使用的qr")
     private String lastQrcode;
 
+    @ApiModelProperty(value = "是否为新用户")
+    private Integer isNew;
+
 }
