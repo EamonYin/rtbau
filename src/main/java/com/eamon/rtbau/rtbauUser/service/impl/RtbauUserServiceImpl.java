@@ -52,7 +52,8 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         if (StringUtils.isNotEmpty(rtbauUser.getLastQrcode())) {
             wrapper.eq(RtbauUser::getLastQrcode, rtbauUser.getLastQrcode());
         }
-        RtbauUser user = wrapper.last("limit 0,1").one();
+//        RtbauUser user = wrapper.last("limit 0,1").one();
+        RtbauUser user = wrapper.one();
         if (user != null && user.getUid() != null) {
             rtbauUser.setId(user.getId());
             flag = iRtbauUserService.updateById(rtbauUser);
@@ -132,7 +133,8 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         GetUserQRInput getUserQRInput = JSONObject.parseObject(pushMsg.getExtra(), GetUserQRInput.class);
         String uid = pushMsg.getUids().get(0);
         log.info("回调pushMsg:{}", uid);
-        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, uid).last("limit 0,1").one();
+//        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, uid).last("limit 0,1").one();
+        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, uid).one();
 //        HttpUtil httpUtil = new HttpUtil();
 //        Map<String, Object> param = new HashMap<>();
 //        param.put("appToken",appToken);
