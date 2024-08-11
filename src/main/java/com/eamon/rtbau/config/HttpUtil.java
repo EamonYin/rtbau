@@ -16,8 +16,10 @@ import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -135,6 +137,110 @@ public class HttpUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public String doPostWithParams(String url, Map<String, Object> params) {
+        final String NEWLINE = "\r\n";
+
+        HttpURLConnection httpConn = null;
+        BufferedInputStream bis = null;
+        DataOutputStream dos = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            URL urlObj = new URL(url);
+            httpConn = (HttpURLConnection) urlObj.openConnection();
+            httpConn.setDoInput(true);
+            // 允许传入body参数
+            httpConn.setDoOutput(true);
+            httpConn.setRequestMethod("POST");
+            // POST不支持缓存
+            httpConn.setUseCaches(false);
+            httpConn.setRequestProperty("Connection", "Keep-Alive");
+            httpConn.setRequestProperty("Accept", "*/*");
+            httpConn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            httpConn.setRequestProperty("Cache-Control", "no-cache");
+            httpConn.setRequestProperty("Charset", "utf-8");
+            // 这个比较重要，按照上面分析的拼装出Content-Type头的内容 https://blog.csdn.net/weiguang102/article/details/119645861
+            httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            httpConn.connect();
+
+            dos = new DataOutputStream(httpConn.getOutputStream());
+            if (params != null && !params.isEmpty()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = params.get(key);
+                    if(stringBuilder.length() == 0) {
+                        stringBuilder.append(key).append("=").append(value == null ? "" : value.toString());
+                    } else {
+                        stringBuilder.append("&").append(key).append("=").append(value == null ? "" : value.toString());
+                    }
+                }
+
+                // 这里要个换行
+                dos.write((stringBuilder + NEWLINE).getBytes());
+                dos.flush();
+                dos.close();
+            }
+
+            byte[] buffer = new byte[8 * 1024];
+            int c = 0;
+            if (httpConn.getResponseCode() == 200) {
+                bis = new BufferedInputStream(httpConn.getInputStream());
+                while ((c = bis.read(buffer)) != -1) {
+                    baos.write(buffer, 0, c);
+                    baos.flush();
+                }
+            }
+            // 将输入流转成字节数组，返回给客户端。
+            return baos.toString("utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (dos != null)
+                    dos.close();
+                if (bis != null)
+                    bis.close();
+                baos.close();
+                if(httpConn != null) {
+                    httpConn.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public String doGetWithParams(String url){
+        String responseBody = null;
+        try {
+            URL getUrl = new URL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection)getUrl
+                    .openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            int respCode = urlConnection.getResponseCode();
+            if (HttpURLConnection.HTTP_OK == respCode) {
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String readLine = null;
+                StringBuffer response = new StringBuffer();
+                while (null != (readLine = bufferedReader.readLine())) {
+                    response.append(readLine);
+                }
+
+                bufferedReader.close();
+                responseBody = response.toString();
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return responseBody;
     }
 
 }

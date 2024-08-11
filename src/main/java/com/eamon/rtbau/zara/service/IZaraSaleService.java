@@ -1,15 +1,15 @@
 package com.eamon.rtbau.zara.service;
 
-import com.eamon.rtbau.zara.entity.ZaraSale;
+import com.eamon.rtbau.zara.entity.BrandSale;
 
 import java.util.List;
 
 public interface IZaraSaleService {
 
-    List<ZaraSale> getZaraSalesLst();
+    List<BrandSale> getZaraSalesLst();
     Boolean isSendZara(String code,Integer price);
 
-    List<ZaraSale> insertSale(ZaraSale zaraSale);
+    List<BrandSale> insertSale(BrandSale brandSale);
 
     Integer deleteSale();
 }

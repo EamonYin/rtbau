@@ -1,6 +1,6 @@
 package com.eamon.rtbau.zara;
 
-import com.eamon.rtbau.zara.entity.ZaraSale;
+import com.eamon.rtbau.zara.entity.BrandSale;
 import com.eamon.rtbau.zara.service.IZaraSaleService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class ZaraController {
     IZaraSaleService zaraSaleService;
 
     @PostMapping("/insertZaraSale")
-    public List<ZaraSale> insertZaraSale(@RequestBody ZaraSale zaraSale){
-       return zaraSaleService.insertSale(zaraSale);
+    public List<BrandSale> insertZaraSale(@RequestBody BrandSale brandSale){
+       return zaraSaleService.insertSale(brandSale);
     }
 
     @PostMapping("/deleteZaraSale")
