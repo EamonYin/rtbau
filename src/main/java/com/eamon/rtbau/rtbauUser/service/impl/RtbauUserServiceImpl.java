@@ -69,9 +69,39 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         IPLocationOutput output = new IPLocationOutput();
         try {
             if (strIp == "") {
-                IpAdrressUtil ipAdrressUtil = new IpAdrressUtil();
-                strIp = ipAdrressUtil.getIpAdrress(request);
-                log.info("请求ip:{}", strIp);
+//                IpAdrressUtil ipAdrressUtil = new IpAdrressUtil();
+//                strIp = ipAdrressUtil.getIpAdrress(request);
+
+                //服务器域名
+//                String Host = request.getHeader("Host");
+//                //（方式一）来访者公网IP
+//                String realIp = request.getHeader("X-Real-IP");
+//                //（方式二）来访者公网IP
+//                String XForwardedFor = request.getHeader("X-Forwarded-For");
+                //WEB应用IP（127.0.0.1）
+//                String getRemoteAddr = request.getRemoteAddr();
+
+                //获取真实IP
+                if (strIp == null || strIp.length() == 0 || "unknown".equalsIgnoreCase(strIp)) {
+                    strIp = request.getHeader("X-Real-IP");
+                }
+                if (strIp == null || strIp.length() == 0 || "unknown".equalsIgnoreCase(strIp)) {
+                    try {
+                        int first = request.getHeader("X-Forwarded-For").indexOf(",");
+                        strIp = request.getHeader("X-Forwarded-For").substring(0, first);
+                        log.info("/rtbau-user/getIPLocation 有多级代理ip:{}", request.getHeader("X-Forwarded-For"));
+                        log.info("请求 first:{},X-Forwarded-For:{}", first, request.getHeader("X-Forwarded-For").substring(0, first));
+                    } catch (Exception e) {
+                        strIp = request.getHeader("X-Forwarded-For");
+                        log.warn("/rtbau-user/getIPLocation 只有一级代理,故直接取ip:{}", strIp);
+                    }
+                }
+//                //上面都还没有，有可能就是局域网内的IP进行操作的，则获取请求头的局域网IP
+                if (strIp == null || strIp.length() == 0 || "unknown".equalsIgnoreCase(strIp)) {
+                    strIp = request.getRemoteAddr();
+                    log.error("/rtbau-user/getIPLocation 未获取到客户端真实ip！");
+                }
+                log.info("请求 ip:{}", strIp);
             }
             HttpUtil httpUtil = new HttpUtil();
             String html = httpUtil.get("https://whois.pconline.com.cn/ipJson.jsp?ip=" + strIp + "&json=true", "", "", new HashMap<>());
