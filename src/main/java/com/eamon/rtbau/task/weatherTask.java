@@ -99,8 +99,7 @@ public class weatherTask {
     /**
      * 获取zara包折扣
      */
-//    @Scheduled(cron = "0 0/10 * * * ? ") //测试每隔两分钟运行一次
-    @Scheduled(cron = "0 0/1 * * * ? ") //测试每隔两分钟运行一次
+    @Scheduled(cron = "1 0/10 * * * ? ") //测试每隔10分钟运行一次
     public void getZaraTask() throws Exception {
         List<BrandSale> brandSalesLst = getZaraSaleService.getZaraSalesLst();
         log.info("目标Zara和优衣库商品列表:", JSONObject.toJSONString(brandSalesLst));

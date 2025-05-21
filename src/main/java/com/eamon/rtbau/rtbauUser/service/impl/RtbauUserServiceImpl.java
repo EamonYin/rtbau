@@ -106,7 +106,7 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
             HttpUtil httpUtil = new HttpUtil();
             String html = httpUtil.get("https://whois.pconline.com.cn/ipJson.jsp?ip=" + strIp + "&json=true", "", "", new HashMap<>());
             IPLocation ipLocation = JSONObject.parseObject(html, IPLocation.class);
-            if (!Objects.isNull(ipLocation.getErr())) {
+            if (!Objects.isNull(ipLocation.getErr()) || (Objects.equals(ipLocation.getRegionCode(), "0") && Objects.equals(ipLocation.getCityCode(), "0") && Objects.equals(ipLocation.getProCode(), "0"))) {
                 // 有可能获取不到所在区，依次取上一级code
                 if (!Objects.equals(ipLocation.getRegionCode(), "0")) {
                     output.setLocationCode(ipLocation.getRegionCode());
@@ -124,6 +124,18 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
                     return output;
                 }
             }
+            // TODO: ip9不能返回对应城市的Code后期换一个兜底方案
+//            else {
+//                // todo:如果失败了，换一个接口获取ip地址信息https://www.ip9.com.cn/?source=iui
+//                html = httpUtil.get("https://ip9.com.cn/get?ip=" + strIp, "", "", new HashMap<>());
+//                IP9Msg ip9Msg = JSONObject.parseObject(html, IP9Msg.class);
+//                IP9Data ip9MsgData = ip9Msg.getData();
+//                if (Objects.equals(ip9Msg.getRet(),200)) {
+//                    output.setLocationCode(ip9MsgData.get);
+//                    output.setLocationName();
+//                }
+//            }
+
         } catch (Exception ex) {
             log.error("获取位置信息错误：{}", ex.getMessage());
         }
