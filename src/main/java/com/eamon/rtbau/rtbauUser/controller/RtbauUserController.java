@@ -108,7 +108,7 @@ public class RtbauUserController {
      * @param echostr
      * @return
      */
-    @RequestMapping(value = "get")
+    @RequestMapping(value = "wxGet")
     @ResponseBody
     public String get(HttpServletRequest request,String signature, String timestamp, String nonce, String echostr) {
         if(request.getMethod().equalsIgnoreCase("get")){//用来校验，一般会验证前端配置的token等，这里简化了代码。
