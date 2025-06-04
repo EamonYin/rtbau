@@ -5,13 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.eamon.rtbau.rtbauUser.entity.pojo.*;
 import com.eamon.rtbau.rtbauUser.mapper.RtbauUserMapper;
 import com.eamon.rtbau.rtbauUser.service.IRtbauUserService;
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.ChatMessage;
-import dev.langchain4j.data.message.Content;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.request.ChatRequest;
-import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.openai.OpenAiChatModel;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -138,19 +130,5 @@ public class RtbauUserController {
     }
 
 
-    public static void main(String[] args) {
-        String me = "helloWord!";
-        System.out.println("用户：" + me);
-        OpenAiChatModel demo = OpenAiChatModel.builder()
-                .baseUrl("https://yunwu.ai/v1")
-                .apiKey("sk-补全")
-                .modelName("deepseek-r1")
-                .timeout(Duration.ofSeconds(30))
-                .build();
-        UserMessage userMessage = new UserMessage(me);
-        ChatRequest build = new ChatRequest.Builder().messages(userMessage).build();
-        ChatResponse chat = demo.chat(build);
-        String string = chat.aiMessage().toString();
-        System.out.println("AI：" + string);
-    }
+
 }
