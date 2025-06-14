@@ -61,4 +61,7 @@ public class RtbauUser extends Model {
     @ApiModelProperty(value = "是否为新用户")
     private Integer isNew;
 
+    @ApiModelProperty(value = "微信OpenId")
+    private String openId;
+
 }

@@ -46,7 +46,10 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         Boolean flag = false;
         //判断是修改还是新增
         LambdaQueryChainWrapper<RtbauUser> wrapper = iRtbauUserService.lambdaQuery();
-        if (StringUtils.isNotEmpty(rtbauUser.getUid())) {
+        if (StringUtils.isNotEmpty(rtbauUser.getOpenId())) {
+            wrapper.eq(RtbauUser::getOpenId, rtbauUser.getOpenId());
+        }
+        if (StringUtils.isEmpty(rtbauUser.getOpenId()) && StringUtils.isNotEmpty(rtbauUser.getUid())) {
             wrapper.eq(RtbauUser::getUid, rtbauUser.getUid());
         }
         if (StringUtils.isNotEmpty(rtbauUser.getLastQrcode())) {
@@ -54,7 +57,11 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
         }
 //        RtbauUser user = wrapper.last("limit 0,1").one();
         RtbauUser user = wrapper.one();
-        if (user != null && user.getUid() != null) {
+        if (user != null && StringUtils.isNotEmpty(user.getOpenId())) { //微信小程序场景
+            rtbauUser.setId(user.getId());
+            rtbauUser.setIsNew(0);
+            flag = iRtbauUserService.updateById(rtbauUser);
+        } else if (user != null && user.getUid() != null && StringUtils.isEmpty(user.getOpenId())) { //wxpusher场景
             rtbauUser.setId(user.getId());
             rtbauUser.setIsNew(0);
             flag = iRtbauUserService.updateById(rtbauUser);

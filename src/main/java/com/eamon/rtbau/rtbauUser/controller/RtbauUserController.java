@@ -91,44 +91,4 @@ public class RtbauUserController {
         return "";
     }
 
-    /**
-     * 微信小程序消息推送实验接口
-     * @param request
-     * @param signature
-     * @param timestamp
-     * @param nonce
-     * @param echostr
-     * @return
-     */
-    @RequestMapping(value = "wxGet")
-    @ResponseBody
-    public String get(HttpServletRequest request,String signature, String timestamp, String nonce, String echostr) {
-        if(request.getMethod().equalsIgnoreCase("get")){//用来校验，一般会验证前端配置的token等，这里简化了代码。
-            return echostr;
-        }else if(request.getMethod().equalsIgnoreCase("POST")){//接收用户的相关行为事件结果
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-                StringBuilder requestContent = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    requestContent.append(line);
-                }
-                reader.close();
-                //接收：{"ToUserName":"gh_ea84a199bf81","FromUserName":"oG0NJ5Oi_3Dd1HlZJ14xfnA0sJ6s","CreateTime":1686131943,"MsgType":"event","Event":"subscribe_msg_popup_event","List":{"PopupScene":"0","SubscribeStatusString":"accept","TemplateId":"4ondVRxk4L20ihrJ3iI15BDK72XatGPxE0MeCVwHasQ"}}
-                log.info("接收：" + requestContent.toString());
-                return "";
-            } catch (IOException e) {
-                // 处理异常情况
-                e.printStackTrace();
-                log.error("异常：" + e.getMessage());
-                throw new RuntimeException(e);
-            }
-        }else{
-            log.info("不是get 或 post方法");
-            return null;
-        }
-    }
-
-
-
 }
