@@ -35,7 +35,10 @@ public class McAdminLogAspect {
         try {
             result = joinPoint.proceed();
             /*返回通知方法*/
-            log.info("返回通知方法>目标方法名:{},返回结果为:{}", signature.getName(), JSON.toJSONString(result));
+            // 过滤掉 getConfigs 方法的返回结果日志
+            if (!"getConfigs".equals(signature.getName())) {
+                log.info("返回通知方法>目标方法名:{},返回结果为:{}", signature.getName(), JSON.toJSONString(result));
+            }
         } catch (Throwable e) {
             /*异常通知方法*/
             log.info("异常通知方法>目标方法名:{},异常为:{}", signature.getName(), e);
