@@ -33,3 +33,4 @@ build/
 .vscode/
 src/main/resources/application-dev.yml
 src/main/java/com/eamon/rtbau/config/GeneratorCodeConfig.java
+src/main/resources/application-rtbau-dev.yml
