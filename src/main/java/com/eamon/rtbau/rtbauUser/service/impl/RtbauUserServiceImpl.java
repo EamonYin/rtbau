@@ -151,9 +151,14 @@ public class RtbauUserServiceImpl extends ServiceImpl<RtbauUserMapper, RtbauUser
 
     @Override
     public Boolean userIsExist(RtbauUser rtbauUser) {
-        RtbauUser user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, rtbauUser.getUid()).eq(RtbauUser::getIsDeleted,0).last("limit 0,1").one();
+        RtbauUser user = new RtbauUser();
+        if(StringUtils.isNotEmpty(rtbauUser.getOpenId())){
+            user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getOpenId, rtbauUser.getOpenId()).eq(RtbauUser::getIsDeleted,0).last("limit 0,1").one();
+        }else {
+           user = iRtbauUserService.lambdaQuery().eq(RtbauUser::getUid, rtbauUser.getUid()).eq(RtbauUser::getIsDeleted,0).last("limit 0,1").one();
+        }
         log.info("userIsExist:{}",JSONObject.toJSONString(user));
-        if (user != null && user.getUid() != null) {
+        if (user != null && (user.getUid() != null || user.getOpenId() != null)) {
             return true;
         }
         return false;
